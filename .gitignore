@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build output (regenerate with: npx tailwindcss -i input.css -o assets/css/style.css --minify)
+# Uncomment if you don't want compiled CSS committed:
+# assets/css/style.css
+
+# Environment / secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS-generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Local backups / scratch files
+*.bak
+*.tmp
+*.orig
+*-copy.*
+
+# Deployment platform folders
+.netlify/
+.vercel/
