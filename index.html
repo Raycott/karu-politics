@@ -248,7 +248,8 @@
         </p>
       </div>
 
-      <!-- Tab navigation -->
+      <!-- Tab navigation: "All Services" stays static; the six category tabs below it are
+           rendered dynamically from Sanity category documents by the catalogue script. -->
       <div id="service-tabs" role="tablist" aria-label="Filter services" class="flex flex-wrap justify-center gap-2 sm:gap-3 mb-12">
         <button type="button" role="tab" data-filter="all" aria-selected="true"
                 class="tab-btn inline-flex items-center gap-2 font-display text-sm font-semibold px-4 py-2 rounded-lg bg-brand-red text-white transition-all duration-300 ease-in-out">
@@ -258,187 +259,16 @@
           </svg>
           All Services
         </button>
-        <button type="button" role="tab" data-filter="apparel" aria-selected="false"
-                class="tab-btn inline-flex items-center gap-2 font-display text-sm font-semibold px-4 py-2 rounded-lg text-white/70 transition-all duration-300 ease-in-out hover:text-white hover:bg-white/10">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
-            <path d="M8 3 4 6l1.5 3L8 8v12h8V8l2.5 1L20 6l-4-3-2 2h-4L8 3Z"/>
-          </svg>
-          Apparel
-        </button>
-        <button type="button" role="tab" data-filter="large-format" aria-selected="false"
-                class="tab-btn inline-flex items-center gap-2 font-display text-sm font-semibold px-4 py-2 rounded-lg text-white/70 transition-all duration-300 ease-in-out hover:text-white hover:bg-white/10">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
-            <path d="M4 21V10M4 10l8-6 8 6M4 10h16M4 21h16M9 21v-6h6v6"/>
-          </svg>
-          Large Format &amp; Fleet
-        </button>
-        <button type="button" role="tab" data-filter="merch-office" aria-selected="false"
-                class="tab-btn inline-flex items-center gap-2 font-display text-sm font-semibold px-4 py-2 rounded-lg text-white/70 transition-all duration-300 ease-in-out hover:text-white hover:bg-white/10">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
-            <rect x="3" y="8" width="18" height="13" rx="1.5"/>
-            <path d="M3 8V6a2 2 0 0 1 2-2h3.5M21 8V6a2 2 0 0 0-2-2h-3.5M9 4v4M15 4v4M3 13h18"/>
-          </svg>
-          Merchandise &amp; Office
-        </button>
-        <button type="button" role="tab" data-filter="digital" aria-selected="false"
-                class="tab-btn inline-flex items-center gap-2 font-display text-sm font-semibold px-4 py-2 rounded-lg text-white/70 transition-all duration-300 ease-in-out hover:text-white hover:bg-white/10">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
-            <rect x="6" y="2" width="12" height="20" rx="2"/>
-            <path d="M11 18h2"/>
-          </svg>
-          Digital Assets
-        </button>
+        <!-- Sanity category tabs are injected here by renderCategoryTabs() -->
       </div>
 
-      <!-- Service cards: 3-column x 2-row grid, 6 total -->
+      <!-- Service cards: rendered dynamically from Sanity products by renderProductCards() -->
       <div id="service-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-
-        <!-- Apparel -->
-        <div class="service-card group" data-category="apparel">
-          <div class="relative h-full rounded-2xl bg-[#91002A] border border-[#7E8390]/30 shadow-2xl shadow-black/40 overflow-hidden transition-all duration-300 hover:-translate-y-1">
-            <span class="absolute top-4 right-4 z-10 bg-white text-[#91002A] text-xs font-display font-semibold px-3 py-1.5 rounded-full shadow-md">
-              From KES 450/piece
-            </span>
-            <div class="w-full aspect-video overflow-hidden rounded-t-xl">
-              <!-- Mockup placeholder: swap `src` for a real, licensed product photo. -->
-              <img src="assets/img/mockup-apparel.jpg" alt="Campaign apparel mockup"
-                   class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105">
-            </div>
-            <div class="p-7">
-              <h3 class="font-display text-lg font-semibold text-white mb-2">Campaign T-Shirts, Caps &amp; Vests</h3>
-              <p class="text-sm leading-relaxed mb-6 text-[#F9FAFB]/90">
-                Ground-team apparel printed to match your digital identity exactly, sized for bulk volunteer orders.
-              </p>
-              <div class="flex flex-col gap-2">
-                <a href="#brief" class="font-display text-sm font-medium text-[#FFD700] hover:text-white transition-colors duration-300">Get Custom Quote →</a>
-                <a href="https://wa.me/254700000000?text=Hi%2C%20I%27d%20like%20a%20quote%20for%20Campaign%20T-Shirts%2C%20Caps%20%26%20Vests" target="_blank" rel="noopener"
-                   class="font-display text-sm font-medium text-white/70 hover:text-white transition-colors duration-300">Order via WhatsApp →</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Large Format & Fleet: Banners -->
-        <div class="service-card group" data-category="large-format">
-          <div class="relative h-full rounded-2xl bg-[#91002A] border border-[#7E8390]/30 shadow-2xl shadow-black/40 overflow-hidden transition-all duration-300 hover:-translate-y-1">
-            <span class="absolute top-4 right-4 z-10 bg-white text-[#91002A] text-xs font-display font-semibold px-3 py-1.5 rounded-full shadow-md">
-              From KES 8,000/banner
-            </span>
-            <div class="w-full aspect-video overflow-hidden rounded-t-xl">
-              <img src="assets/img/mockup-large-format.jpg" alt="Banners and billboard mockup"
-                   class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105">
-            </div>
-            <div class="p-7">
-              <h3 class="font-display text-lg font-semibold text-white mb-2">Banners &amp; Billboard Media</h3>
-              <p class="text-sm leading-relaxed mb-6 text-[#F9FAFB]/90">
-                Large-format visuals sized and proofed for rally sites, junctions, and roadside placement.
-              </p>
-              <div class="flex flex-col gap-2">
-                <a href="#brief" class="font-display text-sm font-medium text-[#FFD700] hover:text-white transition-colors duration-300">Get Custom Quote →</a>
-                <a href="https://wa.me/254700000000?text=Hi%2C%20I%27d%20like%20a%20quote%20for%20Banners%20%26%20Billboard%20Media" target="_blank" rel="noopener"
-                   class="font-display text-sm font-medium text-white/70 hover:text-white transition-colors duration-300">Order via WhatsApp →</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Large Format & Fleet: Vehicle Wraps -->
-        <div class="service-card group" data-category="large-format">
-          <div class="relative h-full rounded-2xl bg-[#91002A] border border-[#7E8390]/30 shadow-2xl shadow-black/40 overflow-hidden transition-all duration-300 hover:-translate-y-1">
-            <span class="absolute top-4 right-4 z-10 bg-white text-[#91002A] text-xs font-display font-semibold px-3 py-1.5 rounded-full shadow-md">
-              From KES 45,000/wrap
-            </span>
-            <div class="w-full aspect-video overflow-hidden rounded-t-xl">
-              <img src="assets/img/mockup-large-format.jpg" alt="Vehicle wrap mockup"
-                   class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105">
-            </div>
-            <div class="p-7">
-              <h3 class="font-display text-lg font-semibold text-white mb-2">Vehicle Wraps</h3>
-              <p class="text-sm leading-relaxed mb-6 text-[#F9FAFB]/90">
-                Full and partial fleet wraps built to survive rough roads and long roadshow routes without peeling.
-              </p>
-              <div class="flex flex-col gap-2">
-                <a href="#brief" class="font-display text-sm font-medium text-[#FFD700] hover:text-white transition-colors duration-300">Get Custom Quote →</a>
-                <a href="https://wa.me/254700000000?text=Hi%2C%20I%27d%20like%20a%20quote%20for%20Vehicle%20Wraps" target="_blank" rel="noopener"
-                   class="font-display text-sm font-medium text-white/70 hover:text-white transition-colors duration-300">Order via WhatsApp →</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Merchandise & Office: Wristbands & Pens -->
-        <div class="service-card group" data-category="merch-office">
-          <div class="relative h-full rounded-2xl bg-[#91002A] border border-[#7E8390]/30 shadow-2xl shadow-black/40 overflow-hidden transition-all duration-300 hover:-translate-y-1">
-            <span class="absolute top-4 right-4 z-10 bg-white text-[#91002A] text-xs font-display font-semibold px-3 py-1.5 rounded-full shadow-md">
-              From KES 15/unit
-            </span>
-            <div class="w-full aspect-video overflow-hidden rounded-t-xl">
-              <img src="assets/img/mockup-large-format.jpg" alt="Wristbands and pens mockup"
-                   class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105">
-            </div>
-            <div class="p-7">
-              <h3 class="font-display text-lg font-semibold text-white mb-2">Wristbands &amp; Branded Pens</h3>
-              <p class="text-sm leading-relaxed mb-6 text-[#F9FAFB]/90">
-                High-volume giveaway items built for mobilization events, priced for large-quantity orders.
-              </p>
-              <div class="flex flex-col gap-2">
-                <a href="#brief" class="font-display text-sm font-medium text-[#FFD700] hover:text-white transition-colors duration-300">Get Custom Quote →</a>
-                <a href="https://wa.me/254700000000?text=Hi%2C%20I%27d%20like%20a%20quote%20for%20Wristbands%20%26%20Branded%20Pens" target="_blank" rel="noopener"
-                   class="font-display text-sm font-medium text-white/70 hover:text-white transition-colors duration-300">Order via WhatsApp →</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Merchandise & Office: Flyers & Posters -->
-        <div class="service-card group" data-category="merch-office">
-          <div class="relative h-full rounded-2xl bg-[#91002A] border border-[#7E8390]/30 shadow-2xl shadow-black/40 overflow-hidden transition-all duration-300 hover:-translate-y-1">
-            <span class="absolute top-4 right-4 z-10 bg-white text-[#91002A] text-xs font-display font-semibold px-3 py-1.5 rounded-full shadow-md">
-              From KES 15/piece
-            </span>
-            <div class="w-full aspect-video overflow-hidden rounded-t-xl">
-              <img src="assets/img/mockup-large-format.jpg" alt="Flyers and campaign posters mockup"
-                   class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105">
-            </div>
-            <div class="p-7">
-              <h3 class="font-display text-lg font-semibold text-white mb-2">Flyers &amp; Campaign Posters</h3>
-              <p class="text-sm leading-relaxed mb-6 text-[#F9FAFB]/90">
-                Doorstep-ready print runs for ground teams, with fast reprints when messaging needs to shift.
-              </p>
-              <div class="flex flex-col gap-2">
-                <a href="#brief" class="font-display text-sm font-medium text-[#FFD700] hover:text-white transition-colors duration-300">Get Custom Quote →</a>
-                <a href="https://wa.me/254700000000?text=Hi%2C%20I%27d%20like%20a%20quote%20for%20Flyers%20%26%20Campaign%20Posters" target="_blank" rel="noopener"
-                   class="font-display text-sm font-medium text-white/70 hover:text-white transition-colors duration-300">Order via WhatsApp →</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Digital Assets -->
-        <div class="service-card group" data-category="digital">
-          <div class="relative h-full rounded-2xl bg-[#91002A] border border-[#7E8390]/30 shadow-2xl shadow-black/40 overflow-hidden transition-all duration-300 hover:-translate-y-1">
-            <span class="absolute top-4 right-4 z-10 bg-white text-[#91002A] text-xs font-display font-semibold px-3 py-1.5 rounded-full shadow-md">
-              From KES 25,000/kit
-            </span>
-            <div class="w-full aspect-video overflow-hidden rounded-t-xl">
-              <img src="assets/img/mockup-digital-design.jpg" alt="Social media launch kit mockup"
-                   class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105">
-            </div>
-            <div class="p-7">
-              <h3 class="font-display text-lg font-semibold text-white mb-2">Social Media Launch Kit</h3>
-              <p class="text-sm leading-relaxed mb-6 text-[#F9FAFB]/90">
-                Templated post sets and video frames that keep every platform consistent with your ground materials.
-              </p>
-              <div class="flex flex-col gap-2">
-                <a href="#brief" class="font-display text-sm font-medium text-[#FFD700] hover:text-white transition-colors duration-300">Get Custom Quote →</a>
-                <a href="https://wa.me/254700000000?text=Hi%2C%20I%27d%20like%20a%20quote%20for%20a%20Social%20Media%20Launch%20Kit" target="_blank" rel="noopener"
-                   class="font-display text-sm font-medium text-white/70 hover:text-white transition-colors duration-300">Order via WhatsApp →</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
+        <p id="catalogue-loading" class="col-span-full text-center text-white/70 font-display text-sm py-8">Loading catalogue…</p>
       </div>
+      <p id="catalogue-error" class="hidden text-center text-white/70 font-display text-sm mt-6">
+        We couldn't load the catalogue right now. Please refresh, or reach us directly via WhatsApp.
+      </p>
     </div>
   </section>
 
@@ -1276,37 +1106,10 @@
   window.addEventListener('scroll', updateHeaderOnScroll);
   updateHeaderOnScroll();
 
-  // Solutions Hub: dynamic tab filtering
-  const tabButtons = document.querySelectorAll('#service-tabs .tab-btn');
-  const serviceCards = document.querySelectorAll('#service-grid .service-card');
-
-  function setActiveTab(activeBtn) {
-    tabButtons.forEach(btn => {
-      const isActive = btn === activeBtn;
-      btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
-      if (isActive) {
-        btn.classList.add('bg-brand-red', 'text-white');
-        btn.classList.remove('text-white/70', 'hover:bg-white/10');
-      } else {
-        btn.classList.remove('bg-brand-red', 'text-white');
-        btn.classList.add('text-white/70', 'hover:bg-white/10');
-      }
-    });
-  }
-
-  function filterCards(filter) {
-    serviceCards.forEach(card => {
-      const matches = filter === 'all' || card.dataset.category === filter;
-      card.style.display = matches ? '' : 'none';
-    });
-  }
-
-  tabButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      setActiveTab(btn);
-      filterCards(btn.dataset.filter);
-    });
-  });
+  // Solutions Hub: category tabs and product cards are now rendered dynamically
+  // from Sanity — see the "SANITY CMS CATALOGUE INTEGRATION" script block below,
+  // which owns tab rendering, card rendering, and click-based filtering together
+  // (they have to live in one place since the tabs/cards don't exist at page load).
 
   // Scroll-reveal: lightweight IntersectionObserver, unobserves each section once
   // revealed so there's no ongoing scroll cost after the animation has run.
@@ -1403,6 +1206,168 @@
     });
   }
 
+</script>
+
+<script>
+  // ============ SANITY CMS CATALOGUE INTEGRATION ============
+  // Fetches categories + products from Sanity and renders them into the existing
+  // #service-tabs / #service-grid markup, preserving the original design exactly.
+  // No npm/build step: talks straight to Sanity's HTTP GROQ endpoint with fetch().
+  (function () {
+    const SANITY_PROJECT_ID = '6oi10syt';
+    const SANITY_DATASET = 'production';
+    const SANITY_API_VERSION = '2024-01-01';
+    const SANITY_QUERY_URL = `https://${SANITY_PROJECT_ID}.api.sanity.io/v${SANITY_API_VERSION}/data/query/${SANITY_DATASET}`;
+    const WHATSAPP_NUMBER = '254700000000';
+
+    const serviceTabs = document.getElementById('service-tabs');
+    const serviceGrid = document.getElementById('service-grid');
+    const catalogueLoading = document.getElementById('catalogue-loading');
+    const catalogueError = document.getElementById('catalogue-error');
+
+    if (!serviceTabs || !serviceGrid) return;
+
+    // Reused for every dynamically generated category tab so we don't need a
+    // per-category icon mapping — keeps the existing tab visual language intact.
+    const CATEGORY_TAB_ICON = `
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+        <rect x="3" y="8" width="18" height="13" rx="1.5"/>
+        <path d="M3 8V6a2 2 0 0 1 2-2h3.5M21 8V6a2 2 0 0 0-2-2h-3.5M9 4v4M15 4v4M3 13h18"/>
+      </svg>`;
+
+    function groq(query) {
+      return fetch(`${SANITY_QUERY_URL}?query=${encodeURIComponent(query)}`)
+        .then((res) => {
+          if (!res.ok) throw new Error(`Sanity request failed: ${res.status}`);
+          return res.json();
+        })
+        .then((json) => json.result);
+    }
+
+    // Builds a Sanity CDN image URL directly from an image asset reference
+    // (e.g. "image-<assetId>-<width>x<height>-<format>"), without pulling in the
+    // @sanity/image-url package — keeps this a dependency-free static site.
+    function urlForImage(imageField) {
+      const ref = imageField && imageField.asset && imageField.asset._ref;
+      if (!ref) return null;
+      const parts = ref.split('-');
+      if (parts.length < 4) return null;
+      const [, assetId, dimensions, format] = parts;
+      return `https://cdn.sanity.io/images/${SANITY_PROJECT_ID}/${SANITY_DATASET}/${assetId}-${dimensions}.${format}?w=800&auto=format`;
+    }
+
+    // Sanity stores a plain number (e.g. 1000); the UI adds "From KES" + thousands
+    // separators. No per-unit suffix ("/piece", "/kit") since not every product has one.
+    function formatPrice(startingPrice) {
+      if (typeof startingPrice !== 'number') return 'Request pricing';
+      return `From KES ${startingPrice.toLocaleString('en-US')}`;
+    }
+
+    function buildWhatsAppLink(productName) {
+      const text = encodeURIComponent(`Hi, I'd like a quote for ${productName}`);
+      return `https://wa.me/${WHATSAPP_NUMBER}?text=${text}`;
+    }
+
+    function renderCategoryTabs(categories) {
+      categories.forEach((category) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.setAttribute('role', 'tab');
+        btn.setAttribute('aria-selected', 'false');
+        btn.dataset.filter = category._id;
+        btn.className = 'tab-btn inline-flex items-center gap-2 font-display text-sm font-semibold px-4 py-2 rounded-lg text-white/70 transition-all duration-300 ease-in-out hover:text-white hover:bg-white/10';
+        btn.innerHTML = `${CATEGORY_TAB_ICON}${category.name}`;
+        serviceTabs.appendChild(btn);
+      });
+    }
+
+    function renderProductCards(products) {
+      serviceGrid.innerHTML = '';
+
+      if (!products.length) {
+        serviceGrid.innerHTML = '<p class="col-span-full text-center text-white/70 font-display text-sm py-8">No products found yet — check back soon.</p>';
+        return;
+      }
+
+      products.forEach((product) => {
+        const imageUrl = urlForImage(product.image);
+        const whatsappLink = buildWhatsAppLink(product.name);
+
+        const card = document.createElement('div');
+        card.className = 'service-card group';
+        card.dataset.category = product.categoryId || '';
+
+        card.innerHTML = `
+          <div class="relative h-full rounded-2xl bg-[#91002A] border border-[#7E8390]/30 shadow-2xl shadow-black/40 overflow-hidden transition-all duration-300 hover:-translate-y-1">
+            <span class="absolute top-4 right-4 z-10 bg-white text-[#91002A] text-xs font-display font-semibold px-3 py-1.5 rounded-full shadow-md">
+              ${formatPrice(product.startingPrice)}
+            </span>
+            <div class="w-full aspect-video overflow-hidden rounded-t-xl bg-black/20">
+              ${imageUrl ? `<img src="${imageUrl}" alt="${product.name}" class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105">` : ''}
+            </div>
+            <div class="p-7">
+              <h3 class="font-display text-lg font-semibold text-white mb-2">${product.name}</h3>
+              <p class="text-sm leading-relaxed mb-6 text-[#F9FAFB]/90">${product.description || ''}</p>
+              <div class="flex flex-col gap-2">
+                <a href="#brief" class="font-display text-sm font-medium text-[#FFD700] hover:text-white transition-colors duration-300">Get Custom Quote →</a>
+                <a href="${whatsappLink}" target="_blank" rel="noopener"
+                   class="font-display text-sm font-medium text-white/70 hover:text-white transition-colors duration-300">Order via WhatsApp →</a>
+              </div>
+            </div>
+          </div>`;
+
+        serviceGrid.appendChild(card);
+      });
+
+      const activeBtn = serviceTabs.querySelector('[aria-selected="true"]');
+      filterCatalogueCards(activeBtn ? activeBtn.dataset.filter : 'all');
+    }
+
+    function setActiveTab(activeBtn) {
+      serviceTabs.querySelectorAll('.tab-btn').forEach((btn) => {
+        const isActive = btn === activeBtn;
+        btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        if (isActive) {
+          btn.classList.add('bg-brand-red', 'text-white');
+          btn.classList.remove('text-white/70', 'hover:bg-white/10');
+        } else {
+          btn.classList.remove('bg-brand-red', 'text-white');
+          btn.classList.add('text-white/70', 'hover:bg-white/10');
+        }
+      });
+    }
+
+    function filterCatalogueCards(filter) {
+      serviceGrid.querySelectorAll('.service-card').forEach((card) => {
+        const matches = filter === 'all' || card.dataset.category === filter;
+        card.style.display = matches ? '' : 'none';
+      });
+    }
+
+    // Event delegation: tabs (both the static "All" button and the dynamically
+    // injected category tabs) are handled by one listener on the stable container.
+    serviceTabs.addEventListener('click', (e) => {
+      const btn = e.target.closest('.tab-btn');
+      if (!btn) return;
+      setActiveTab(btn);
+      filterCatalogueCards(btn.dataset.filter);
+    });
+
+    const categoriesQuery = `*[_type == "category"] | order(order asc){_id, name}`;
+    const productsQuery = `*[_type == "product"] | order(order asc){_id, name, description, startingPrice, image, featured, "categoryId": category._ref}`;
+
+    Promise.all([groq(categoriesQuery), groq(productsQuery)])
+      .then(([categories, products]) => {
+        if (catalogueLoading) catalogueLoading.remove();
+        renderCategoryTabs(categories || []);
+        renderProductCards(products || []);
+      })
+      .catch((err) => {
+        console.error('Sanity catalogue fetch failed:', err);
+        if (catalogueLoading) catalogueLoading.classList.add('hidden');
+        if (catalogueError) catalogueError.classList.remove('hidden');
+      });
+  })();
 </script>
 
 </body>
