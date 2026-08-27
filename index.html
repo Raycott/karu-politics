@@ -20,6 +20,147 @@
 <!-- Production Tailwind build: purged + minified (24KB vs the CDN's full runtime compiler) -->
 <link rel="stylesheet" href="assets/css/style.css">
 
+<!-- Hand-written CSS for the "Get a Quote" modal and "View All Products" control.
+     assets/css/style.css is a purged/precompiled Tailwind build generated from the
+     original markup, so any brand-new Tailwind utility class (fixed overlay, max-h,
+     backdrop blur, etc.) has no guaranteed rule until that build is regenerated.
+     These rules are self-contained plain CSS so both features render correctly with
+     zero changes to the Tailwind build. Existing Tailwind classes already present
+     elsewhere in this file (font-display, border-brand-slate/30, focus:border-brand-red,
+     etc.) are still reused wherever confirmed safe — see the form fields below. -->
+<style>
+  .kp-quote-trigger {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    appearance: none;
+    text-align: left;
+  }
+
+  .kp-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.6);
+  }
+
+  .kp-modal-overlay.is-open {
+    display: flex;
+  }
+
+  body.kp-modal-open {
+    overflow: hidden;
+  }
+
+  .kp-modal {
+    position: relative;
+    width: 100%;
+    max-width: 28rem;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+    padding: 1.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .kp-modal {
+      padding: 2rem;
+    }
+  }
+
+  .kp-modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: rgba(62, 62, 62, 0.6);
+    transition: all 0.3s ease-in-out;
+  }
+
+  .kp-modal-close:hover {
+    color: #BC0036;
+    background: rgba(188, 0, 54, 0.1);
+  }
+
+  .kp-modal-heading {
+    padding-right: 2rem;
+  }
+
+  .kp-field {
+    margin-top: 1.25rem;
+  }
+
+  .kp-field:first-child {
+    margin-top: 0;
+  }
+
+  .kp-field-error {
+    display: none;
+    margin-top: 0.375rem;
+    font-size: 0.75rem;
+    color: #BC0036;
+  }
+
+  .kp-field-error.is-visible {
+    display: block;
+  }
+
+  .kp-field-input.has-error {
+    border-color: #BC0036;
+  }
+
+  .kp-form-error {
+    display: none;
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: #BC0036;
+  }
+
+  .kp-form-error.is-visible {
+    display: block;
+  }
+
+  .kp-view-all-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.5rem;
+  }
+
+  .kp-view-all-btn {
+    font-weight: 600;
+    font-size: 0.875rem;
+    padding: 0.75rem 1.75rem;
+    border-radius: 9999px;
+    border: 2px solid #ffffff;
+    color: #ffffff;
+    background: none;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .kp-view-all-btn:hover {
+    background: #ffffff;
+    color: #91002A;
+    transform: translateY(-2px);
+  }
+</style>
+
 <!-- Favicon -->
 <link rel="icon" type="image/svg+xml" href="assets/img/karu-logo.svg">
 
@@ -60,7 +201,7 @@
         <a href="#brief" class="font-display text-sm font-semibold text-brand-red hover:text-brand-crimson transition-colors duration-300 underline decoration-2 underline-offset-4 decoration-brand-red/40 hover:decoration-brand-crimson">
           Get Quote
         </a>
-        <a href="tel:+254700000000"
+        <a href="tel:+254114200610"
            class="inline-flex items-center gap-2 font-display text-sm font-semibold px-5 py-2.5 rounded-full border-2 border-brand-red text-brand-red bg-white
                   transition-all duration-300 ease-in-out
                   hover:bg-brand-red hover:text-white hover:shadow-lg hover:shadow-brand-red/25 hover:-translate-y-0.5">
@@ -94,7 +235,7 @@
       <div class="h-px bg-brand-slate/20 my-2"></div>
 
       <a href="#brief" class="font-display font-semibold text-brand-red px-3 py-3 rounded-lg transition-all duration-300 hover:bg-brand-red/5">Get Quote</a>
-      <a href="tel:+254700000000"
+      <a href="tel:+254114200610"
          class="inline-flex items-center justify-center gap-2 font-display font-semibold px-5 py-3 mt-1 rounded-full border-2 border-brand-red text-brand-red
                 transition-all duration-300 ease-in-out hover:bg-brand-red hover:text-white">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
@@ -248,7 +389,7 @@
         </p>
       </div>
 
-      <!-- Tab navigation: "All Services" stays static; the six category tabs below it are
+      <!-- Tab navigation: "All Products" stays static; the six category tabs below it are
            rendered dynamically from Sanity category documents by the catalogue script. -->
       <div id="service-tabs" role="tablist" aria-label="Filter services" class="flex flex-wrap justify-center gap-2 sm:gap-3 mb-12">
         <button type="button" role="tab" data-filter="all" aria-selected="true"
@@ -257,7 +398,7 @@
             <path d="M12.59 2.41 20 9.83a2 2 0 0 1 0 2.83l-7.17 7.17a2 2 0 0 1-2.83 0L2.41 12.24a2 2 0 0 1-.41-.59V4a1.6 1.6 0 0 1 1.6-1.6h7.65c.22 0 .43.09.59.24Z"/>
             <circle cx="7" cy="7" r="1.2" fill="currentColor" stroke="none"/>
           </svg>
-          All Services
+          All Products
         </button>
         <!-- Sanity category tabs are injected here by renderCategoryTabs() -->
       </div>
@@ -554,7 +695,7 @@
               Drives ground visibility among younger demographics using high-energy merchandise, wristbands, and ready-to-post social media frames. Mission-critical for campaigns leaning on youth turnout, where visibility on the ground has to translate directly into shareable content the same day.
             </p>
             <div class="flex flex-wrap gap-3">
-              <a href="https://wa.me/254700000000?text=Hi%2C%20I%27d%20like%20to%20inquire%20about%20the%20Youth%20Mobilization%20Kit" target="_blank" rel="noopener"
+              <a href="https://wa.me/254114200610?text=Hi%2C%20I%27d%20like%20to%20inquire%20about%20the%20Youth%20Mobilization%20Kit" target="_blank" rel="noopener"
                  class="inline-flex items-center gap-2 font-display text-sm font-semibold px-5 py-2.5 rounded-full bg-[#25D366] text-white
                         transition-all duration-300 ease-in-out hover:bg-[#1DA851] hover:shadow-md hover:-translate-y-0.5">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
@@ -582,7 +723,7 @@
               Builds grassroots loyalty through high-utility custom-branded lessos/khangas and matching tote bags — items that get used and seen well beyond a single event, keeping the campaign visible in daily life.
             </p>
             <div class="flex flex-wrap gap-3">
-              <a href="https://wa.me/254700000000?text=Hi%2C%20I%27d%20like%20to%20inquire%20about%20the%20Women%20Groups%20Mobilization%20Kit" target="_blank" rel="noopener"
+              <a href="https://wa.me/254114200610?text=Hi%2C%20I%27d%20like%20to%20inquire%20about%20the%20Women%20Groups%20Mobilization%20Kit" target="_blank" rel="noopener"
                  class="inline-flex items-center gap-2 font-display text-sm font-semibold px-5 py-2.5 rounded-full bg-[#25D366] text-white
                         transition-all duration-300 ease-in-out hover:bg-[#1DA851] hover:shadow-md hover:-translate-y-0.5">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
@@ -610,7 +751,7 @@
               Heavy-duty truck wraps and outdoor audio banners built to survive intense rally routes and long days on rough roads — no reprints needed mid-tour.
             </p>
             <div class="flex flex-wrap gap-3">
-              <a href="https://wa.me/254700000000?text=Hi%2C%20I%27d%20like%20to%20inquire%20about%20the%20Roadshow%20Logistics%20Kit" target="_blank" rel="noopener"
+              <a href="https://wa.me/254114200610?text=Hi%2C%20I%27d%20like%20to%20inquire%20about%20the%20Roadshow%20Logistics%20Kit" target="_blank" rel="noopener"
                  class="inline-flex items-center gap-2 font-display text-sm font-semibold px-5 py-2.5 rounded-full bg-[#25D366] text-white
                         transition-all duration-300 ease-in-out hover:bg-[#1DA851] hover:shadow-md hover:-translate-y-0.5">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
@@ -638,7 +779,7 @@
               High-volume flyers and volunteer teardrop banners built to achieve absolute saturation across a ward or constituency without gaps in coverage.
             </p>
             <div class="flex flex-wrap gap-3">
-              <a href="https://wa.me/254700000000?text=Hi%2C%20I%27d%20like%20to%20inquire%20about%20the%20Ground%20Mobilization%20Kit" target="_blank" rel="noopener"
+              <a href="https://wa.me/254114200610?text=Hi%2C%20I%27d%20like%20to%20inquire%20about%20the%20Ground%20Mobilization%20Kit" target="_blank" rel="noopener"
                  class="inline-flex items-center gap-2 font-display text-sm font-semibold px-5 py-2.5 rounded-full bg-[#25D366] text-white
                         transition-all duration-300 ease-in-out hover:bg-[#1DA851] hover:shadow-md hover:-translate-y-0.5">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
@@ -666,7 +807,7 @@
               High-end media backdrop walls, podium banners, and VIP invitations that signal political authority from the very first appearance of the campaign.
             </p>
             <div class="flex flex-wrap gap-3">
-              <a href="https://wa.me/254700000000?text=Hi%2C%20I%27d%20like%20to%20inquire%20about%20the%20Launch%20Day%20Kit" target="_blank" rel="noopener"
+              <a href="https://wa.me/254114200610?text=Hi%2C%20I%27d%20like%20to%20inquire%20about%20the%20Launch%20Day%20Kit" target="_blank" rel="noopener"
                  class="inline-flex items-center gap-2 font-display text-sm font-semibold px-5 py-2.5 rounded-full bg-[#25D366] text-white
                         transition-all duration-300 ease-in-out hover:bg-[#1DA851] hover:shadow-md hover:-translate-y-0.5">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
@@ -694,7 +835,7 @@
               Unified WhatsApp broadcast assets and Canva-ready digital poster formats built for a 24/7 online presence that never falls out of sync with your print materials.
             </p>
             <div class="flex flex-wrap gap-3">
-              <a href="https://wa.me/254700000000?text=Hi%2C%20I%27d%20like%20to%20inquire%20about%20the%20Digital%20Campaign%20Kit" target="_blank" rel="noopener"
+              <a href="https://wa.me/254114200610?text=Hi%2C%20I%27d%20like%20to%20inquire%20about%20the%20Digital%20Campaign%20Kit" target="_blank" rel="noopener"
                  class="inline-flex items-center gap-2 font-display text-sm font-semibold px-5 py-2.5 rounded-full bg-[#25D366] text-white
                         transition-all duration-300 ease-in-out hover:bg-[#1DA851] hover:shadow-md hover:-translate-y-0.5">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
@@ -722,7 +863,7 @@
               High-contrast polling agent tracking notebooks, reflector vests, and observer caps — built for the one day the campaign can't afford any confusion on the ground.
             </p>
             <div class="flex flex-wrap gap-3">
-              <a href="https://wa.me/254700000000?text=Hi%2C%20I%27d%20like%20to%20inquire%20about%20the%20Election-Day%20Visibility%20Kit" target="_blank" rel="noopener"
+              <a href="https://wa.me/254114200610?text=Hi%2C%20I%27d%20like%20to%20inquire%20about%20the%20Election-Day%20Visibility%20Kit" target="_blank" rel="noopener"
                  class="inline-flex items-center gap-2 font-display text-sm font-semibold px-5 py-2.5 rounded-full bg-[#25D366] text-white
                         transition-all duration-300 ease-in-out hover:bg-[#1DA851] hover:shadow-md hover:-translate-y-0.5">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
@@ -747,7 +888,7 @@
           <h3 class="font-display text-xl font-semibold mb-1" style="color:#3E3E3E;">Need to build a bespoke bundle?</h3>
           <p class="text-sm" style="color:#7E8390;">Connect with our team to map a plan to your target budget.</p>
         </div>
-        <a href="https://wa.me/254700000000?text=Hi%2C%20I%27d%20like%20to%20build%20a%20bespoke%20campaign%20package" target="_blank" rel="noopener"
+        <a href="https://wa.me/254114200610?text=Hi%2C%20I%27d%20like%20to%20build%20a%20bespoke%20campaign%20package" target="_blank" rel="noopener"
            class="shrink-0 inline-flex items-center justify-center gap-2 font-display text-sm font-semibold px-7 py-3.5 rounded-full
                   bg-[#25D366] text-white transition-all duration-300 ease-in-out
                   hover:bg-[#1DA851] hover:shadow-lg hover:shadow-[#25D366]/30 hover:-translate-y-0.5">
@@ -1014,7 +1155,7 @@
           </svg>
         </div>
         <h3 class="font-display text-base font-semibold text-white mb-1">Phone Hotline</h3>
-        <a href="tel:+254700000000" class="text-sm text-white/90 hover:text-white transition-colors duration-300">+254 700 000 000</a>
+        <a href="tel:+254114200610" class="text-sm text-white/90 hover:text-white transition-colors duration-300">+254 114 200 610</a>
         <p class="text-xs mt-2" style="color:#7E8390;">Typical response time: under 10 minutes</p>
       </div>
 
@@ -1037,7 +1178,7 @@
           </svg>
         </div>
         <h3 class="font-display text-base font-semibold text-white mb-1">WhatsApp</h3>
-        <a href="https://wa.me/254700000000" target="_blank" rel="noopener" class="text-sm text-white/90 hover:text-white transition-colors duration-300">Message us directly</a>
+        <a href="https://wa.me/254114200610" target="_blank" rel="noopener" class="text-sm text-white/90 hover:text-white transition-colors duration-300">Message us directly</a>
         <p class="text-xs mt-2" style="color:#7E8390;">Typical response time: under 10 minutes</p>
       </div>
 
@@ -1065,7 +1206,7 @@
 </footer>
 
 <!-- ============ FLOATING WHATSAPP WIDGET ============ -->
-<a href="https://wa.me/254700000000?text=Hi%2C%20I%27d%20like%20to%20talk%20about%20a%20campaign%20order"
+<a href="https://wa.me/254114200610?text=Hi%2C%20I%27d%20like%20to%20talk%20about%20a%20campaign%20order"
    target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp"
    class="fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 rounded-full
           bg-[#25D366] shadow-xl transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-2xl">
@@ -1075,7 +1216,49 @@
   </svg>
 </a>
 
+<!-- ============ GET A QUOTE MODAL ============ -->
+<!-- Opened by clicking any "Get Custom Quote" button on a catalogue product card
+     (see [data-action="open-quote-modal"] in the Sanity catalogue script). The
+     heading and WhatsApp message are filled in dynamically per product. -->
+<div id="quote-modal-overlay" class="kp-modal-overlay" aria-hidden="true">
+  <div id="quote-modal" class="kp-modal" role="dialog" aria-modal="true" aria-labelledby="quote-modal-heading">
+
+    <button type="button" id="quote-modal-close" class="kp-modal-close" aria-label="Close quote form">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+        <path d="M18 6 6 18M6 6l12 12"/>
+      </svg>
+    </button>
+
+    <h3 id="quote-modal-heading" class="font-display text-xl font-semibold mb-6 kp-modal-heading" style="color:#3E3E3E;">
+      Get a Quote for <span id="quote-modal-product-name">this product</span>
+    </h3>
+
+    <form id="quote-modal-form" novalidate>
+      <div id="quote-modal-fields"><!-- Fields injected dynamically by renderQuoteFields() --></div>
+
+      <p id="quote-modal-form-error" class="kp-form-error">
+        Please fix the highlighted fields before sending.
+      </p>
+
+      <button type="submit"
+              class="mt-6 w-full inline-flex items-center justify-center gap-2 font-display text-sm font-semibold px-6 py-3.5 rounded-full bg-[#25D366] text-white transition-all duration-300 ease-in-out hover:bg-[#1DA851] hover:shadow-lg hover:-translate-y-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+          <path d="M12.01 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.36 5.07L2 22l5.08-1.33A9.94 9.94 0 0 0 12.01 22C17.53 22 22 17.52 22 12S17.53 2 12.01 2Zm5.36 14.14c-.23.64-1.13 1.18-1.85 1.33-.49.1-1.13.19-3.29-.7-2.76-1.14-4.54-3.94-4.68-4.13-.14-.19-1.12-1.49-1.12-2.84 0-1.35.71-2.02.96-2.29.23-.25.5-.31.67-.31h.48c.16 0 .37-.03.57.44.23.55.78 1.9.85 2.04.07.14.11.3.02.49-.09.19-.14.31-.28.47-.14.16-.29.36-.42.48-.14.14-.28.29-.12.57.16.28.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.22 1.37.28.14.44.12.6-.07.16-.19.68-.79.86-1.06.18-.28.35-.23.6-.14.25.09 1.58.75 1.85.88.28.14.46.21.53.32.07.11.07.65-.16 1.29Z"/>
+        </svg>
+        Send via WhatsApp
+      </button>
+    </form>
+  </div>
+</div>
+
 <script>
+  // Single source of truth for the business WhatsApp number, used by every
+  // WhatsApp link/CTA built dynamically in JS on this page (the catalogue
+  // script and the quote modal script below both reference this — it's a
+  // top-level `const` in a classic <script>, so later <script> tags on this
+  // page share the same global scope and can see it without redeclaring it).
+  const WHATSAPP_NUMBER = '254114200610';
+
   const menuToggle = document.getElementById('menu-toggle');
   const mobileMenu = document.getElementById('mobile-menu');
 
@@ -1218,7 +1401,7 @@
     const SANITY_DATASET = 'production';
     const SANITY_API_VERSION = '2024-01-01';
     const SANITY_QUERY_URL = `https://${SANITY_PROJECT_ID}.api.sanity.io/v${SANITY_API_VERSION}/data/query/${SANITY_DATASET}`;
-    const WHATSAPP_NUMBER = '254700000000';
+    // WHATSAPP_NUMBER is declared once, globally, in the first <script> block above.
 
     const serviceTabs = document.getElementById('service-tabs');
     const serviceGrid = document.getElementById('service-grid');
@@ -1268,6 +1451,19 @@
       return `https://wa.me/${WHATSAPP_NUMBER}?text=${text}`;
     }
 
+    // Used whenever product data (names, descriptions) is interpolated into an
+    // innerHTML string, so a stray quote/angle-bracket in Sanity content can't
+    // break the markup or the data-* attributes read by the quote modal.
+    function escapeHtml(value) {
+      return String(value == null ? '' : value).replace(/[&<>"']/g, (char) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;',
+      }[char]));
+    }
+
     function renderCategoryTabs(categories) {
       categories.forEach((category) => {
         const btn = document.createElement('button');
@@ -1292,6 +1488,8 @@
       products.forEach((product) => {
         const imageUrl = urlForImage(product.image);
         const whatsappLink = buildWhatsAppLink(product.name);
+        const safeName = escapeHtml(product.name);
+        const safeDescription = escapeHtml(product.description);
 
         const card = document.createElement('div');
         card.className = 'service-card group';
@@ -1303,13 +1501,19 @@
               ${formatPrice(product.startingPrice)}
             </span>
             <div class="w-full aspect-video overflow-hidden rounded-t-xl bg-black/20">
-              ${imageUrl ? `<img src="${imageUrl}" alt="${product.name}" class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105">` : ''}
+              ${imageUrl ? `<img src="${imageUrl}" alt="${safeName}" class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105">` : ''}
             </div>
             <div class="p-7">
-              <h3 class="font-display text-lg font-semibold text-white mb-2">${product.name}</h3>
-              <p class="text-sm leading-relaxed mb-6 text-[#F9FAFB]/90">${product.description || ''}</p>
+              <h3 class="font-display text-lg font-semibold text-white mb-2">${safeName}</h3>
+              <p class="text-sm leading-relaxed mb-6 text-[#F9FAFB]/90">${safeDescription}</p>
               <div class="flex flex-col gap-2">
-                <a href="#brief" class="font-display text-sm font-medium text-[#FFD700] hover:text-white transition-colors duration-300">Get Custom Quote →</a>
+                <button type="button" class="kp-quote-trigger font-display text-sm font-medium text-[#FFD700] hover:text-white transition-colors duration-300"
+                        data-action="open-quote-modal"
+                        data-product-id="${escapeHtml(product._id)}"
+                        data-product-name="${safeName}"
+                        data-product-category="${escapeHtml(product.categoryId || '')}">
+                  Get Custom Quote →
+                </button>
                 <a href="${whatsappLink}" target="_blank" rel="noopener"
                    class="font-display text-sm font-medium text-white/70 hover:text-white transition-colors duration-300">Order via WhatsApp →</a>
               </div>
@@ -1319,8 +1523,7 @@
         serviceGrid.appendChild(card);
       });
 
-      const activeBtn = serviceTabs.querySelector('[aria-selected="true"]');
-      filterCatalogueCards(activeBtn ? activeBtn.dataset.filter : 'all');
+      applyCatalogueView();
     }
 
     function setActiveTab(activeBtn) {
@@ -1337,20 +1540,65 @@
       });
     }
 
-    function filterCatalogueCards(filter) {
-      serviceGrid.querySelectorAll('.service-card').forEach((card) => {
-        const matches = filter === 'all' || card.dataset.category === filter;
-        card.style.display = matches ? '' : 'none';
+    // "All Products" initially shows only the first ALL_PRODUCTS_PAGE_SIZE cards
+    // (in Sanity `order` order, since that's the order they were rendered in).
+    // Category tabs always show every matching product — no capping there.
+    const ALL_PRODUCTS_PAGE_SIZE = 6;
+    let activeFilter = 'all';
+    let isAllProductsExpanded = false;
+
+    function applyCatalogueView() {
+      const cards = Array.from(serviceGrid.querySelectorAll('.service-card'));
+
+      if (activeFilter === 'all') {
+        cards.forEach((card, i) => {
+          card.style.display = (isAllProductsExpanded || i < ALL_PRODUCTS_PAGE_SIZE) ? '' : 'none';
+        });
+      } else {
+        cards.forEach((card) => {
+          card.style.display = card.dataset.category === activeFilter ? '' : 'none';
+        });
+      }
+
+      renderViewAllButton(cards.length);
+    }
+
+    function renderViewAllButton(totalCount) {
+      let wrap = document.getElementById('view-all-products-wrap');
+      const shouldShow = activeFilter === 'all' && !isAllProductsExpanded && totalCount > ALL_PRODUCTS_PAGE_SIZE;
+
+      if (!shouldShow) {
+        if (wrap) wrap.remove();
+        return;
+      }
+
+      if (wrap) return; // already rendered, nothing to change
+
+      wrap = document.createElement('div');
+      wrap.id = 'view-all-products-wrap';
+      wrap.className = 'col-span-full kp-view-all-wrap';
+      wrap.innerHTML = `
+        <button type="button" id="view-all-products-btn" class="font-display kp-view-all-btn">
+          View All Products
+        </button>`;
+      serviceGrid.appendChild(wrap);
+
+      document.getElementById('view-all-products-btn').addEventListener('click', () => {
+        isAllProductsExpanded = true;
+        applyCatalogueView();
       });
     }
 
-    // Event delegation: tabs (both the static "All" button and the dynamically
-    // injected category tabs) are handled by one listener on the stable container.
+    // Event delegation: tabs (both the static "All Products" button and the
+    // dynamically injected category tabs) are handled by one listener on the
+    // stable container. Returning to "All Products" always resets the 6-card cap.
     serviceTabs.addEventListener('click', (e) => {
       const btn = e.target.closest('.tab-btn');
       if (!btn) return;
       setActiveTab(btn);
-      filterCatalogueCards(btn.dataset.filter);
+      activeFilter = btn.dataset.filter;
+      if (activeFilter === 'all') isAllProductsExpanded = false;
+      applyCatalogueView();
     });
 
     const categoriesQuery = `*[_type == "category"] | order(order asc){_id, name}`;
@@ -1367,6 +1615,184 @@
         if (catalogueLoading) catalogueLoading.classList.add('hidden');
         if (catalogueError) catalogueError.classList.remove('hidden');
       });
+  })();
+</script>
+
+<script>
+  // ============ GET A QUOTE MODAL ============
+  // Opens for any element with [data-action="open-quote-modal"] — currently the
+  // "Get Custom Quote" button rendered on each Sanity product card. Event
+  // delegation is used so this works regardless of when/how cards are rendered.
+  (function () {
+    const overlay = document.getElementById('quote-modal-overlay');
+    const closeBtn = document.getElementById('quote-modal-close');
+    const headingProductName = document.getElementById('quote-modal-product-name');
+    const fieldsContainer = document.getElementById('quote-modal-fields');
+    const form = document.getElementById('quote-modal-form');
+    const formError = document.getElementById('quote-modal-form-error');
+
+    if (!overlay || !form || !fieldsContainer) return;
+
+    // WHATSAPP_NUMBER is declared once, globally, in the first <script> block —
+    // the same number used everywhere else on the site, not a separate one.
+
+    // Today every product uses this same four-field set. To give a specific
+    // product or category its own fields later, add an entry to
+    // QUOTE_FIELDS_BY_CATEGORY (keyed by Sanity category _id) or
+    // QUOTE_FIELDS_BY_PRODUCT (keyed by Sanity product _id) — getQuoteFields()
+    // already checks those first, so no other code needs to change.
+    const DEFAULT_QUOTE_FIELDS = [
+      { id: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Jane Wanjiku' },
+      { id: 'phone', label: 'WhatsApp Number', type: 'tel', required: true, placeholder: '+254 7XX XXX XXX' },
+      { id: 'quantity', label: 'Quantity', type: 'number', required: true, min: 1, placeholder: 'e.g. 100' },
+      { id: 'dimensions', label: 'Dimensions', type: 'text', required: true, placeholder: 'e.g. 3m x 6m' },
+    ];
+    const QUOTE_FIELDS_BY_CATEGORY = {};
+    const QUOTE_FIELDS_BY_PRODUCT = {};
+
+    function getQuoteFields(product) {
+      return (
+        QUOTE_FIELDS_BY_PRODUCT[product.id] ||
+        QUOTE_FIELDS_BY_CATEGORY[product.categoryId] ||
+        DEFAULT_QUOTE_FIELDS
+      );
+    }
+
+    let activeProduct = null;
+    let activeFields = DEFAULT_QUOTE_FIELDS;
+    let lastFocusedElement = null;
+
+    function renderQuoteFields(fields) {
+      fieldsContainer.innerHTML = fields.map((field) => `
+        <div class="kp-field">
+          <label for="quote-field-${field.id}" class="block font-display text-sm font-medium mb-2" style="color:#3E3E3E;">${field.label}</label>
+          <input type="${field.type}" id="quote-field-${field.id}" name="${field.id}"
+                 placeholder="${field.placeholder || ''}" ${field.min !== undefined ? `min="${field.min}"` : ''}
+                 class="kp-field-input w-full rounded-lg border-2 border-brand-slate/30 px-4 py-3 text-sm text-brand-charcoal-deep focus:border-brand-red focus:ring-4 focus:ring-brand-red/10 focus:outline-none transition-all duration-300">
+          <p class="kp-field-error"></p>
+        </div>
+      `).join('');
+    }
+
+    function openQuoteModal(product) {
+      activeProduct = product;
+      activeFields = getQuoteFields(product);
+      headingProductName.textContent = product.name;
+      renderQuoteFields(activeFields);
+      formError.classList.remove('is-visible');
+
+      lastFocusedElement = document.activeElement;
+      overlay.classList.add('is-open');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('kp-modal-open');
+
+      const firstInput = fieldsContainer.querySelector('input');
+      if (firstInput) firstInput.focus();
+    }
+
+    function closeQuoteModal() {
+      overlay.classList.remove('is-open');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('kp-modal-open');
+      form.reset();
+      formError.classList.remove('is-visible');
+      if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') lastFocusedElement.focus();
+    }
+
+    function showFieldError(field, message) {
+      const input = document.getElementById(`quote-field-${field.id}`);
+      if (!input) return;
+      input.classList.add('has-error');
+      const errorEl = input.parentElement.querySelector('.kp-field-error');
+      if (errorEl) {
+        errorEl.textContent = message;
+        errorEl.classList.add('is-visible');
+      }
+    }
+
+    function clearFieldErrors() {
+      fieldsContainer.querySelectorAll('.kp-field-input').forEach((input) => input.classList.remove('has-error'));
+      fieldsContainer.querySelectorAll('.kp-field-error').forEach((el) => el.classList.remove('is-visible'));
+    }
+
+    function validateFields(fields) {
+      clearFieldErrors();
+      let isValid = true;
+      const values = {};
+
+      fields.forEach((field) => {
+        const input = document.getElementById(`quote-field-${field.id}`);
+        const rawValue = input ? input.value.trim() : '';
+        values[field.id] = rawValue;
+
+        if (field.required && !rawValue) {
+          showFieldError(field, `${field.label} is required.`);
+          isValid = false;
+          return;
+        }
+
+        if (field.type === 'number' && rawValue) {
+          const numericValue = Number(rawValue);
+          const minValue = field.min === undefined ? 1 : field.min;
+          if (Number.isNaN(numericValue) || numericValue < minValue) {
+            showFieldError(field, `Enter a valid ${field.label.toLowerCase()} of ${minValue} or more.`);
+            isValid = false;
+          }
+        }
+      });
+
+      return { isValid, values };
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!activeProduct) return;
+
+      const { isValid, values } = validateFields(activeFields);
+
+      if (!isValid) {
+        formError.classList.add('is-visible');
+        return;
+      }
+      formError.classList.remove('is-visible');
+
+      const message = [
+        'Quote Request',
+        `Product: ${activeProduct.name}`,
+        '',
+        `Name: ${values.name || ''}`,
+        `WhatsApp: ${values.phone || ''}`,
+        `Quantity: ${values.quantity || ''}`,
+        `Dimensions: ${values.dimensions || ''}`,
+      ].join('\n');
+
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank', 'noopener');
+      closeQuoteModal();
+    });
+
+    closeBtn.addEventListener('click', closeQuoteModal);
+
+    // Clicking the dimmed backdrop (but not the modal card itself) closes it.
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) closeQuoteModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay.classList.contains('is-open')) closeQuoteModal();
+    });
+
+    // Delegated on the document since product cards are rendered dynamically by
+    // the Sanity catalogue script, after this listener is attached.
+    document.addEventListener('click', (e) => {
+      const trigger = e.target.closest('[data-action="open-quote-modal"]');
+      if (!trigger) return;
+      e.preventDefault();
+      openQuoteModal({
+        id: trigger.dataset.productId,
+        name: trigger.dataset.productName,
+        categoryId: trigger.dataset.productCategory,
+      });
+    });
   })();
 </script>
 
