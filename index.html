@@ -1560,33 +1560,46 @@
         });
       }
 
-      renderViewAllButton(cards.length);
+      renderViewToggleButton(cards.length);
     }
 
-    function renderViewAllButton(totalCount) {
-      let wrap = document.getElementById('view-all-products-wrap');
-      const shouldShow = activeFilter === 'all' && !isAllProductsExpanded && totalCount > ALL_PRODUCTS_PAGE_SIZE;
+    // Renders a single toggle button under the "All Products" grid: "View All
+    // Products" while collapsed, "View Less Products" while expanded. Hidden
+    // entirely for category tabs, or when there are 6 or fewer products total.
+    function renderViewToggleButton(totalCount) {
+      let wrap = document.getElementById('view-toggle-wrap');
+      const shouldShow = activeFilter === 'all' && totalCount > ALL_PRODUCTS_PAGE_SIZE;
 
       if (!shouldShow) {
         if (wrap) wrap.remove();
         return;
       }
 
-      if (wrap) return; // already rendered, nothing to change
+      const label = isAllProductsExpanded ? 'View Less Products' : 'View All Products';
 
-      wrap = document.createElement('div');
-      wrap.id = 'view-all-products-wrap';
-      wrap.className = 'col-span-full kp-view-all-wrap';
-      wrap.innerHTML = `
-        <button type="button" id="view-all-products-btn" class="font-display kp-view-all-btn">
-          View All Products
-        </button>`;
-      serviceGrid.appendChild(wrap);
+      if (!wrap) {
+        wrap = document.createElement('div');
+        wrap.id = 'view-toggle-wrap';
+        wrap.className = 'col-span-full kp-view-all-wrap';
+        wrap.innerHTML = `<button type="button" id="view-toggle-btn" class="font-display kp-view-all-btn"></button>`;
+        serviceGrid.appendChild(wrap);
 
-      document.getElementById('view-all-products-btn').addEventListener('click', () => {
-        isAllProductsExpanded = true;
-        applyCatalogueView();
-      });
+        document.getElementById('view-toggle-btn').addEventListener('click', () => {
+          const wasExpanded = isAllProductsExpanded;
+          isAllProductsExpanded = !isAllProductsExpanded;
+          applyCatalogueView();
+
+          // Collapsing removes a lot of content above the fold, which can leave
+          // the viewport scrolled past the now-shorter grid. Re-anchor to the
+          // top of the catalogue section so the collapse doesn't feel jarring.
+          if (wasExpanded) {
+            const section = document.getElementById('services');
+            if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      }
+
+      document.getElementById('view-toggle-btn').textContent = label;
     }
 
     // Event delegation: tabs (both the static "All Products" button and the
@@ -1636,42 +1649,151 @@
     // WHATSAPP_NUMBER is declared once, globally, in the first <script> block —
     // the same number used everywhere else on the site, not a separate one.
 
-    // Today every product uses this same four-field set. To give a specific
-    // product or category its own fields later, add an entry to
-    // QUOTE_FIELDS_BY_CATEGORY (keyed by Sanity category _id) or
-    // QUOTE_FIELDS_BY_PRODUCT (keyed by Sanity product _id) — getQuoteFields()
-    // already checks those first, so no other code needs to change.
-    const DEFAULT_QUOTE_FIELDS = [
-      { id: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Jane Wanjiku' },
-      { id: 'phone', label: 'WhatsApp Number', type: 'tel', required: true, placeholder: '+254 7XX XXX XXX' },
-      { id: 'quantity', label: 'Quantity', type: 'number', required: true, min: 1, placeholder: 'e.g. 100' },
-      { id: 'dimensions', label: 'Dimensions', type: 'text', required: true, placeholder: 'e.g. 3m x 6m' },
-    ];
+    // Every product's form starts with these two fields, then gets product-specific
+    // fields appended (see PRODUCT_QUOTE_FIELDS_BY_NAME below).
+    const NAME_FIELD = { id: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Jane Wanjiku' };
+    const PHONE_FIELD = { id: 'phone', label: 'WhatsApp Number', messageLabel: 'WhatsApp', type: 'tel', required: true, placeholder: '+254 7XX XXX XXX' };
+
+    // Small builders for the recurring product-specific field shapes, so the
+    // mapping table below stays readable.
+    const F = {
+      quantity: (label) => ({ id: 'quantity', label: label || 'Quantity', type: 'number', required: true, min: 1, placeholder: 'e.g. 100' }),
+      sizes: () => ({ id: 'sizes', label: 'Sizes', type: 'text', required: true, placeholder: 'e.g. S x10, M x20, L x15' }),
+      dimensions: () => ({ id: 'dimensions', label: 'Dimensions', type: 'text', required: true, placeholder: 'e.g. 3m x 1m' }),
+      vehicleType: () => ({ id: 'vehicleType', label: 'Vehicle Type', type: 'text', required: true, placeholder: 'e.g. Pickup, Van, Bus' }),
+      vehicleModel: () => ({ id: 'vehicleModel', label: 'Vehicle Model', type: 'text', required: true, placeholder: 'e.g. Toyota Hiace' }),
+      brandingType: () => ({
+        id: 'brandingType', label: 'Branding Type', type: 'select', required: true,
+        options: [
+          { value: '', label: 'Select branding type' },
+          { value: 'Partial Wrap', label: 'Partial Wrap' },
+          { value: 'Full Wrap', label: 'Full Wrap' },
+        ],
+      }),
+      details: (label, placeholder) => ({
+        id: 'details',
+        label: label || 'Design/Print Details',
+        type: 'textarea',
+        required: true,
+        placeholder: placeholder || 'Colours, logos, candidate branding, anything we should know…',
+      }),
+    };
+
+    // Product-specific fields, keyed by the Sanity product's `name` (lowercased,
+    // trimmed) — the field set is defined by what's actually shown/needed per
+    // product, which cuts across category lines (e.g. T-Shirts need Sizes,
+    // Caps in the same category don't), so name is the practical key here. The
+    // original QUOTE_FIELDS_BY_CATEGORY/QUOTE_FIELDS_BY_PRODUCT maps below still
+    // take priority if populated later with real Sanity `_id` values.
+    const PRODUCT_QUOTE_FIELDS_BY_NAME = {
+      // Apparel — sized items
+      't-shirts': [F.quantity(), F.sizes(), F.details()],
+      'polo': [F.quantity(), F.sizes(), F.details()],
+      'hoodies': [F.quantity(), F.sizes(), F.details()],
+      'reflective vests': [F.quantity(), F.sizes(), F.details()],
+
+      // Apparel / merch — no sizing
+      'caps': [F.quantity(), F.details()],
+      'umbrellas': [F.quantity(), F.details()],
+      'wristbands': [F.quantity(), F.details()],
+      'bibs': [F.quantity(), F.details()],
+      'pens': [F.quantity(), F.details()],
+      'water bottles': [F.quantity(), F.details()],
+
+      // Campaign Posters
+      'rally posters': [F.quantity(), F.dimensions(), F.details()],
+      'candidate posters': [F.quantity(), F.dimensions(), F.details()],
+      'placards': [F.quantity(), F.dimensions(), F.details()],
+
+      // Rally Banners & Event Branding
+      'teardrop banners': [F.quantity(), F.dimensions(), F.details()],
+      'campaign flags': [F.quantity(), F.dimensions(), F.details()],
+      'rally banners': [F.quantity(), F.dimensions(), F.details()],
+      'podium branding': [F.quantity(), F.dimensions(), F.details()],
+      'stage backdrops': [F.quantity(), F.dimensions(), F.details()],
+      'pull-up banners': [F.quantity(), F.dimensions(), F.details()],
+      'photo wall stickers': [F.quantity(), F.dimensions(), F.details()],
+
+      // Vehicle Branding — Branding Type only shown when the product itself
+      // doesn't already imply partial vs full.
+      'campaign truck branding': [F.vehicleType(), F.vehicleModel(), F.brandingType(), F.details()],
+      'partial vehicle wrap': [F.vehicleType(), F.vehicleModel(), F.details()],
+      'full vehicle wrap': [F.vehicleType(), F.vehicleModel(), F.details()],
+
+      // Campaign Stationery — no dimensions
+      'business cards': [F.quantity(), F.details()],
+      'letterheads': [F.quantity(), F.details()],
+      'notebooks': [F.quantity(), F.details()],
+      'nametags': [F.quantity(), F.details()],
+
+      // Campaign Stationery — with dimensions
+      'flyers': [F.quantity(), F.dimensions(), F.details()],
+      'stickers': [F.quantity(), F.dimensions(), F.details()],
+
+      // Digital Campaign Assets
+      'social media posts': [F.quantity('Number of Posts'), F.details('Content/Design Requirements', 'What should each post say or include?')],
+      'digital campaign posters': [F.quantity(), F.details('Content/Design Requirements', 'What should each poster say or include?')],
+      'campaign video edits': [F.quantity('Number of Videos'), F.details('Video Requirements', 'Footage, length, platform, style, etc.')],
+      'social media campaign kit': [F.details('Requirements / What they need included', 'Platforms, number of assets, themes, etc.')],
+    };
+
+    // Generic fallback for any product not covered above (e.g. a new Sanity
+    // product added later without an explicit mapping yet).
+    const DEFAULT_PRODUCT_FIELDS = [F.quantity(), F.details()];
+
+    // Original per-category/per-product override hooks, kept for the existing
+    // architecture — populate these with real Sanity `_id` values if a specific
+    // product or category ever needs to diverge from its name-based mapping
+    // above without editing PRODUCT_QUOTE_FIELDS_BY_NAME.
     const QUOTE_FIELDS_BY_CATEGORY = {};
     const QUOTE_FIELDS_BY_PRODUCT = {};
 
+    function normalizeProductName(name) {
+      return String(name || '').trim().toLowerCase();
+    }
+
     function getQuoteFields(product) {
-      return (
+      const specificFields =
         QUOTE_FIELDS_BY_PRODUCT[product.id] ||
         QUOTE_FIELDS_BY_CATEGORY[product.categoryId] ||
-        DEFAULT_QUOTE_FIELDS
-      );
+        PRODUCT_QUOTE_FIELDS_BY_NAME[normalizeProductName(product.name)] ||
+        DEFAULT_PRODUCT_FIELDS;
+
+      return [NAME_FIELD, PHONE_FIELD, ...specificFields];
     }
 
     let activeProduct = null;
-    let activeFields = DEFAULT_QUOTE_FIELDS;
+    let activeFields = [NAME_FIELD, PHONE_FIELD, ...DEFAULT_PRODUCT_FIELDS];
     let lastFocusedElement = null;
 
     function renderQuoteFields(fields) {
-      fieldsContainer.innerHTML = fields.map((field) => `
-        <div class="kp-field">
-          <label for="quote-field-${field.id}" class="block font-display text-sm font-medium mb-2" style="color:#3E3E3E;">${field.label}</label>
-          <input type="${field.type}" id="quote-field-${field.id}" name="${field.id}"
+      fieldsContainer.innerHTML = fields.map((field) => {
+        const sharedClasses = 'kp-field-input w-full rounded-lg border-2 border-brand-slate/30 px-4 py-3 text-sm text-brand-charcoal-deep focus:border-brand-red focus:ring-4 focus:ring-brand-red/10 focus:outline-none transition-all duration-300';
+        let controlHtml;
+
+        if (field.type === 'select') {
+          const optionsHtml = (field.options || [])
+            .map((opt) => `<option value="${opt.value}">${opt.label}</option>`)
+            .join('');
+          controlHtml = `<select id="quote-field-${field.id}" name="${field.id}" class="${sharedClasses} bg-white">${optionsHtml}</select>`;
+        } else if (field.type === 'textarea') {
+          controlHtml = `<textarea id="quote-field-${field.id}" name="${field.id}" rows="3"
+                 placeholder="${field.placeholder || ''}"
+                 class="${sharedClasses} resize-none"></textarea>`;
+        } else {
+          controlHtml = `<input type="${field.type}" id="quote-field-${field.id}" name="${field.id}"
                  placeholder="${field.placeholder || ''}" ${field.min !== undefined ? `min="${field.min}"` : ''}
-                 class="kp-field-input w-full rounded-lg border-2 border-brand-slate/30 px-4 py-3 text-sm text-brand-charcoal-deep focus:border-brand-red focus:ring-4 focus:ring-brand-red/10 focus:outline-none transition-all duration-300">
-          <p class="kp-field-error"></p>
-        </div>
-      `).join('');
+                 class="${sharedClasses}">`;
+        }
+
+        return `
+          <div class="kp-field">
+            <label for="quote-field-${field.id}" class="block font-display text-sm font-medium mb-2" style="color:#3E3E3E;">${field.label}</label>
+            ${controlHtml}
+            <p class="kp-field-error"></p>
+          </div>
+        `;
+      }).join('');
     }
 
     function openQuoteModal(product) {
@@ -1686,8 +1808,8 @@
       overlay.setAttribute('aria-hidden', 'false');
       document.body.classList.add('kp-modal-open');
 
-      const firstInput = fieldsContainer.querySelector('input');
-      if (firstInput) firstInput.focus();
+      const firstField = fieldsContainer.querySelector('input, select, textarea');
+      if (firstField) firstField.focus();
     }
 
     function closeQuoteModal() {
@@ -1756,15 +1878,15 @@
       }
       formError.classList.remove('is-visible');
 
-      const message = [
-        'Quote Request',
-        `Product: ${activeProduct.name}`,
-        '',
-        `Name: ${values.name || ''}`,
-        `WhatsApp: ${values.phone || ''}`,
-        `Quantity: ${values.quantity || ''}`,
-        `Dimensions: ${values.dimensions || ''}`,
-      ].join('\n');
+      // Built dynamically from activeFields — whatever fields this product's
+      // modal actually showed (and the user filled in) is exactly what ends up
+      // in the message, in the same order they appear in the form.
+      const messageLines = ['Quote Request', '', `Product: ${activeProduct.name}`];
+      activeFields.forEach((field) => {
+        const value = values[field.id];
+        if (value) messageLines.push(`${field.messageLabel || field.label}: ${value}`);
+      });
+      const message = messageLines.join('\n');
 
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank', 'noopener');
       closeQuoteModal();
